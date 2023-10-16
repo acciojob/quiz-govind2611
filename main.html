@@ -1,16 +1,157 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <style>
+        .quiz-container {
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        label {
+            cursor: pointer;
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #submit {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <div class="quiz-container" id="quiz">
+        <h1 id="question"></h1>
+        <input type="radio" id="a" name="answer">
+        <label for="a" id="a_text"></label>
+        <input type="radio" id="b" name="answer">
+        <label for="b" id="b_text"></label>
+        <input type="radio" id="c" name="answer">
+        <label for="c" id="c_text"></label>
+        <input type="radio" id="d" name="answer">
+        <label for="d" id="d_text"></label>
+        <button id="submit">Submit</button>
+    </div>
 
+    <script>
+        const questions = [
+            {
+                question: "Which language runs in a web browser?",
+                a: "Java",
+                b: "C",
+                c: "Python",
+                d: "JavaScript",
+                correct: "d",
+            },
+            {
+                question: "What does CSS stand for?",
+                a: "Central Style Sheets",
+                b: "Cascading Style Sheets",
+                c: "Cascading Simple Sheets",
+                d: "Cars SUVs Sailboats",
+                correct: "b",
+            },
+            {
+                question: "What does HTML stand for?",
+                a: "Hypertext Markup Language",
+                b: "Hypertext Markdown Language",
+                c: "Hyperloop Machine Language",
+                d: "Helicopters Terminals Motorboats Lamborghinis",
+                correct: "a",
+            },
+            {
+                question: "What year was JavaScript launched?",
+                a: "1996",
+                b: "1995",
+                c: "1994",
+                d: "none of the above",
+                correct: "b",
+            },
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById('question');
+        const aTextElement = document.getElementById('a_text');
+        const bTextElement = document.getElementById('b_text');
+        const cTextElement = document.getElementById('c_text');
+        const dTextElement = document.getElementById('d_text');
+        const submitButton = document.getElementById('submit');
+
+        function showQuestion() {
+            const current = questions[currentQuestion];
+            questionElement.textContent = current.question;
+            aTextElement.textContent = current.a;
+            bTextElement.textContent = current.b;
+            cTextElement.textContent = current.c;
+            dTextElement.textContent = current.d;
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                const selectedAnswer = selectedOption.id;
+                if (selectedAnswer === questions[currentQuestion].correct) {
+                    score++;
+                }
+                selectedOption.checked = false;
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            } else {
+                alert("Please select an option before submitting.");
+            }
+        }
+
+        function showResult() {
+            questionElement.textContent = `You scored ${score} out of ${questions.length} questions.`;
+            aTextElement.style.display = 'none';
+            bTextElement.style.display = 'none';
+            cTextElement.style.display = 'none';
+            dTextElement.style.display = 'none';
+            submitButton.textContent = "Reload Quiz";
+            submitButton.addEventListener('click', resetQuiz);
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+            aTextElement.style.display = 'block';
+            bTextElement.style.display = 'block';
+            cTextElement.style.display = 'block';
+            dTextElement.style display = 'block';
+            submitButton.textContent = "Submit";
+            submitButton.removeEventListener('click', resetQuiz);
+        }
+
+        showQuestion();
+        submitButton.addEventListener('click', checkAnswer);
+    </script>
 </body>
-
 </html>
